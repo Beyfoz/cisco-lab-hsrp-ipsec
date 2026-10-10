@@ -1,0 +1,91 @@
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R1-HQ
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+license udi pid CISCO1941/K9 sn FTX1524233P-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0.10
+ description LAN_HQ_VLAN10
+ encapsulation dot1Q 10
+ ip address 192.168.1.3 255.255.255.0
+ ip nat inside
+ standby 10 ip 192.168.1.1
+ standby 10 preempt
+!
+interface GigabitEthernet0/1
+ description WAN_ISP
+ ip address 203.0.113.6 255.255.255.252
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip nat inside source list ALC_NAT interface GigabitEthernet0/1 overload
+ip classless
+ip route 0.0.0.0 0.0.0.0 203.0.113.5 
+!
+ip flow-export version 9
+!
+!
+ip access-list standard ALC_NAT
+ permit 192.168.1.0 0.0.0.255
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
+
